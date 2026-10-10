@@ -1,12 +1,12 @@
 "use client"
 
-import { decrement, increment, incrementByValue } from "@/redux/counter/counterSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { decrement, increment, incrementByValue, selectValue } from "@/redux/counter/counterSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 export default function Home() {
 
-  const { value } = useSelector((state) => state.counter)
-  const dispatch = useDispatch()
+  const { value } = useAppSelector(selectValue)
+  const dispatch = useAppDispatch()
   return (
     <div className="">
       <div className="flex flex-col items-center justify-center gap-4 p-8">
