@@ -1,9 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from "@/redux/counter/counterSlice"
+import { rootReducer } from './rootReducer'
 export const store = configureStore({
-    reducer: {
-        counter: counterReducer
-    }
+    reducer: rootReducer,
+    devTools: process.env.NEXT_PUBLIC_NODE_ENV === "development"
 })
 
 // Infer the `RootState`, `AppDispatch`, and `AppStore` types from the store itself

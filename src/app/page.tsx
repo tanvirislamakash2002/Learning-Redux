@@ -1,6 +1,6 @@
 "use client"
 
-import { decrement, increment, incrementByValue, selectValue } from "@/redux/counter/counterSlice";
+import { decrement, increment, incrementByValue, selectValue } from "@/redux/features/counter/counterSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 export default function Home() {
