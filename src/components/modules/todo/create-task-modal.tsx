@@ -29,6 +29,8 @@ import {
   type TTaskType,
   type TTaskPriorityType,
 } from "@/redux/features/tasks"
+import { useAppDispatch } from "@/redux/hooks"
+import { addTask } from "@/redux/features/tasks/tasks.slice"
 
 export interface TaskFormData {
   title: string
@@ -49,8 +51,11 @@ export function CreateTaskModal() {
     },
   })
 
+  const dispatch = useAppDispatch()
+
   const onSubmit = (data: TaskFormData) => {
     console.log("Create Task Form Submitted:", data)
+    dispatch(addTask(data))
     reset()
     setIsOpen(false)
   }
