@@ -1,7 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { TInitialState } from "./tasks.type";
-
-
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { ITask, TInitialState } from "./tasks.type";
 
 const initialState: TInitialState = []
 
@@ -9,8 +7,12 @@ const tasksSlice = createSlice({
     name: "tasks",
     initialState,
     reducers: {
-        addTask: (state, action) => {
-            state.push(action.payload)
+        addTask: (state, action: PayloadAction<Omit<ITask, "id" | "updatedAt">>) => {
+            state.push({
+                ...action.payload,
+                id: crypto.randomUUID(),
+                updatedAt: new Date().toISOString(),
+            })
         }
     }
 })

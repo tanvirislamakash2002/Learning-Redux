@@ -6,6 +6,7 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 import {
   Dialog,
   DialogContent,
@@ -41,6 +42,7 @@ export interface TaskFormData {
 
 export function CreateTaskModal() {
   const [isOpen, setIsOpen] = useState(false)
+  const dispatch = useAppDispatch()
 
   const { register, handleSubmit, control, reset } = useForm<TaskFormData>({
     defaultValues: {
@@ -50,8 +52,6 @@ export function CreateTaskModal() {
       priority: "medium",
     },
   })
-
-  const dispatch = useAppDispatch()
 
   const onSubmit = (data: TaskFormData) => {
     console.log("Create Task Form Submitted:", data)
@@ -67,14 +67,12 @@ export function CreateTaskModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger
-        render={
-          <Button className="bg-white hover:bg-neutral-200 text-neutral-950 font-medium px-4 py-2 h-9 rounded-lg text-sm flex items-center gap-1.5 cursor-pointer shadow-sm border-0 transition-colors">
-            <Plus className="size-4 stroke-[2.5]" />
-            New Task
-          </Button>
-        }
-      />
+      <DialogTrigger asChild>
+        <Button className="bg-white hover:bg-neutral-200 text-neutral-950 font-medium px-4 py-2 h-9 rounded-lg text-sm gap-1.5 cursor-pointer shadow-sm border-0 transition-colors">
+          <Plus className="size-4 stroke-[2.5]" />
+          New Task
+        </Button>
+      </DialogTrigger>
 
       <DialogContent className="sm:max-w-[440px] bg-[#121214] border border-neutral-800 text-neutral-100 p-6 rounded-2xl shadow-2xl">
         <DialogHeader className="gap-1">
@@ -89,12 +87,12 @@ export function CreateTaskModal() {
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-2">
           {/* Title */}
           <div className="space-y-1.5">
-            <label
+            <Label
               htmlFor="task-title"
-              className="text-sm font-medium text-neutral-200 block"
+              className="text-sm font-medium text-neutral-200"
             >
               Title
-            </label>
+            </Label>
             <Input
               id="task-title"
               {...register("title", { required: true })}
@@ -105,12 +103,12 @@ export function CreateTaskModal() {
 
           {/* Description */}
           <div className="space-y-1.5">
-            <label
+            <Label
               htmlFor="task-desc"
-              className="text-sm font-medium text-neutral-200 block"
+              className="text-sm font-medium text-neutral-200"
             >
               Description
-            </label>
+            </Label>
             <Textarea
               id="task-desc"
               {...register("description")}
@@ -124,9 +122,9 @@ export function CreateTaskModal() {
           <div className="grid grid-cols-2 gap-3.5">
             {/* Status Select */}
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-neutral-200 block">
+              <Label className="text-sm font-medium text-neutral-200">
                 Status
-              </label>
+              </Label>
               <Controller
                 name="status"
                 control={control}
@@ -135,7 +133,7 @@ export function CreateTaskModal() {
                     value={field.value}
                     onValueChange={(val) => field.onChange(val as TTaskType)}
                   >
-                    <SelectTrigger className="w-full h-10 bg-[#18181b]/80 border-neutral-800 text-white rounded-xl px-3.5 flex justify-between items-center text-sm focus-visible:ring-1 focus-visible:ring-neutral-600">
+                    <SelectTrigger className="w-full h-10 bg-[#18181b]/80 border-neutral-800 text-white rounded-xl px-3.5 text-sm focus-visible:ring-1 focus-visible:ring-neutral-600">
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent className="bg-[#18181b] border-neutral-800 text-neutral-200 rounded-xl shadow-xl">
@@ -156,9 +154,9 @@ export function CreateTaskModal() {
 
             {/* Priority Select */}
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-neutral-200 block">
+              <Label className="text-sm font-medium text-neutral-200">
                 Priority
-              </label>
+              </Label>
               <Controller
                 name="priority"
                 control={control}
@@ -169,7 +167,7 @@ export function CreateTaskModal() {
                       field.onChange(val as TTaskPriorityType)
                     }
                   >
-                    <SelectTrigger className="w-full h-10 bg-[#18181b]/80 border-neutral-800 text-white data-placeholder:text-neutral-400 rounded-xl px-3.5 flex justify-between items-center text-sm focus-visible:ring-1 focus-visible:ring-neutral-600">
+                    <SelectTrigger className="w-full h-10 bg-[#18181b]/80 border-neutral-800 text-white rounded-xl px-3.5 text-sm focus-visible:ring-1 focus-visible:ring-neutral-600">
                       <SelectValue placeholder="Select priority" />
                     </SelectTrigger>
                     <SelectContent className="bg-[#18181b] border-neutral-800 text-neutral-200 rounded-xl shadow-xl">
