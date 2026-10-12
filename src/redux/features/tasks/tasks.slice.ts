@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, nanoid, type PayloadAction } from "@reduxjs/toolkit";
 import type { ITask, TInitialState } from "./tasks.type";
 
 const initialState: TInitialState = []
@@ -7,12 +7,22 @@ const tasksSlice = createSlice({
     name: "tasks",
     initialState,
     reducers: {
-        addTask: (state, action: PayloadAction<Omit<ITask, "id" | "updatedAt">>) => {
-            state.push({
-                ...action.payload,
-                id: crypto.randomUUID(),
-                updatedAt: new Date().toISOString(),
-            })
+        addTask: {
+            prepare: (input: Pick<ITask, "title" | "description" | "status" | "priority">) => {
+                const task = {
+                    id: nanoid(),
+                    title: input.title.trim(),
+                    description: input.description,
+                    priority: input.priority,
+                    status: input.status,
+                    createdAt: Date.now(),
+                    updatedAt: Date.now(),
+                };
+                return { payload: task }
+            },
+            reducer: (state, action: PayloadAction<ITask>) => {
+                state.push(action.payload)
+            }
         }
     }
 })

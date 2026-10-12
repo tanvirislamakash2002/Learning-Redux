@@ -38,7 +38,6 @@ export function TaskList() {
             {tasks.map((task) => (
                 <TaskItem key={task.id} task={task} />
             ))}
-            what a day
         </div>
     );
 }
