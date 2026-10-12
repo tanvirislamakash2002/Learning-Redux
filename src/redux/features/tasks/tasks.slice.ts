@@ -23,7 +23,25 @@ const tasksSlice = createSlice({
             reducer: (state, action: PayloadAction<ITask>) => {
                 state.push(action.payload)
             }
-        }
+        },
+        updateTask: (state, action) => {
+            const { id, change } = action.payload;
+            const task = state.find((item) => item.id === id)
+            if (!task) return
+            Object.assign(task, change, { updatedAt: Date.now() })
+        },
+        updateStatus: (state, action) => {
+            const { id, status } = action.payload;
+            const task = state.find((item) => item.id === id);
+            if (!task) return;
+            task.status = status;
+            task.updatedAt = Date.now()
+        },
+        removeTask: (state, action) => {
+            const task = state.find((item) => item.id === action.payload)
+            if (!task) return;
+            return state.filter((item) => item.id !== task.id)
+        },
     }
 })
 
