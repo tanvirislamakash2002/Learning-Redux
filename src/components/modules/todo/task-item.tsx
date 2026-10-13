@@ -10,12 +10,18 @@ import {
     DropdownMenuItem,
     DropdownMenuLabel,
     DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { PriorityBadge } from "./priority-badge";
-import type { ITask } from "@/redux/features/tasks";
+import type { ITask, TTaskType } from "@/redux/features/tasks";
+import { TASK_STATUS } from "@/redux/features/tasks";
+import { useAppDispatch } from "@/redux/hooks";
+import { updateStatus, removeTask, updateTask } from "@/redux/features/tasks/tasks.slice";
+import { useState } from "react";
+import EditTaskModal from "./edit-task-modal";
 
 const STATUS_DOT = {
     pending: "bg-slate-400",
@@ -24,15 +30,24 @@ const STATUS_DOT = {
 };
 
 export function TaskItem({ task }: { task: ITask }) {
+    const dispatch = useAppDispatch();
+    const [editOpen, setEditOpen] = useState(false);
     const handleStatusChange = (value: string) => {
-        console.log(value);
+        dispatch(updateStatus({ id: task.id, status: value as TTaskType }));
+    };
+    const handleEdit = () => {
+        setEditOpen(true);
+    };
+    const closeEdit = () => {
+        setEditOpen(false);
     };
 
     const handleDelete = () => {
-        toast.warning("Task deleted", { description: task.title });
+        dispatch(removeTask(task.id));
+        toast.success("Task deleted", { description: task.title });
     };
 
-    return (
+    return (<>
         <Card className="flex flex-row items-start justify-between gap-3 p-4">
             <div className="flex flex-1 flex-col gap-2 min-w-0">
                 <div className="flex items-center gap-2">
@@ -85,14 +100,14 @@ export function TaskItem({ task }: { task: ITask }) {
                         value={task.status}
                         onValueChange={handleStatusChange}
                     >
-                        {/* {TASK_STATUSES.map((s) => (
-              <DropdownMenuRadioItem key={s} value={s}>
-                {STATUS_LABEL[s]}
-              </DropdownMenuRadioItem>
-            ))} */}
+                        {TASK_STATUS.map((s) => (
+                            <DropdownMenuRadioItem key={s} value={s}>
+                                {s}
+                            </DropdownMenuRadioItem>
+                        ))}
                     </DropdownMenuRadioGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onSelect={() => console.log("Edit task:", task)}>
+                    <DropdownMenuItem onSelect={handleEdit}>
                         <PencilIcon className="size-4" /> Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem variant="destructive" onSelect={handleDelete}>
@@ -101,5 +116,7 @@ export function TaskItem({ task }: { task: ITask }) {
                 </DropdownMenuContent>
             </DropdownMenu>
         </Card>
-    );
+
+        <EditTaskModal open={editOpen} onClose={closeEdit} task={task} />
+    </>);
 }
