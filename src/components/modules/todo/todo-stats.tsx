@@ -1,60 +1,58 @@
-import React from "react"
+"use client"
 
-interface TodoStatsProps {
-  total?: number
-  pending?: number
-  inProgress?: number
-  done?: number
-  high?: number
-  medium?: number
-  low?: number
-}
+import { Card } from "@/components/ui/card";
+import { selectTaskStatus } from "@/redux/features/tasks/tasks.selector";
+import { useAppSelector } from "@/redux/hooks";
 
-export function TodoStats({
-  total = 0,
-}: TodoStatsProps) {
+export function TodoStats() {
+  const stats = useAppSelector(selectTaskStatus);
+
+  const items: Array<{ label: string; value: number; tone: string }> = [
+    { label: "Total", value: stats.total, tone: "text-foreground" },
+    {
+      label: "Pending",
+      value: stats.byStatus["pending"],
+      tone: "text-slate-600 dark:text-slate-300",
+    },
+    {
+      label: "In Progress",
+      value: stats.byStatus["in-progress"],
+      tone: "text-blue-600 dark:text-blue-300",
+    },
+    {
+      label: "Done",
+      value: stats.byStatus["done"],
+      tone: "text-emerald-600 dark:text-emerald-300",
+    },
+    {
+      label: "High",
+      value: stats.byPriority.high,
+      tone: "text-red-600 dark:text-red-300",
+    },
+    {
+      label: "Medium",
+      value: stats.byPriority.medium,
+      tone: "text-amber-600 dark:text-amber-300",
+    },
+    {
+      label: "Low",
+      value: stats.byPriority.low,
+      tone: "text-emerald-600 dark:text-emerald-300",
+    },
+  ];
+
   return (
-    <div className="rounded-2xl border border-neutral-800/80 bg-[#121214]/60 px-6 py-5 backdrop-blur-sm shadow-sm">
-      <div className="grid grid-cols-7 gap-4">
-        <div className="space-y-1">
-          <span className="text-[11px] font-semibold tracking-wider text-neutral-400 uppercase block">
-            TOTAL
+    <Card className="grid grid-cols-2 gap-3 p-4 sm:grid-cols-4 lg:grid-cols-7">
+      {items.map((item) => (
+        <div key={item.label} className="flex flex-col">
+          <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+            {item.label}
           </span>
-          <p className="text-2xl font-bold text-white tracking-tight leading-none">
-            {total}
-          </p>
-        </div>
-        <div>
-          <span className="text-[11px] font-semibold tracking-wider text-neutral-400 uppercase block">
-            PENDING
+          <span className={`text-2xl font-semibold tabular-nums ${item.tone}`}>
+            {item.value}
           </span>
         </div>
-        <div>
-          <span className="text-[11px] font-semibold tracking-wider text-neutral-400 uppercase block">
-            IN PROGRESS
-          </span>
-        </div>
-        <div>
-          <span className="text-[11px] font-semibold tracking-wider text-neutral-400 uppercase block">
-            DONE
-          </span>
-        </div>
-        <div>
-          <span className="text-[11px] font-semibold tracking-wider text-neutral-400 uppercase block">
-            HIGH
-          </span>
-        </div>
-        <div>
-          <span className="text-[11px] font-semibold tracking-wider text-neutral-400 uppercase block">
-            MEDIUM
-          </span>
-        </div>
-        <div>
-          <span className="text-[11px] font-semibold tracking-wider text-neutral-400 uppercase block">
-            LOW
-          </span>
-        </div>
-      </div>
-    </div>
-  )
+      ))}
+    </Card>
+  );
 }
