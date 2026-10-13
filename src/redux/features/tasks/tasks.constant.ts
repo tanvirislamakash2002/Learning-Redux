@@ -1,8 +1,8 @@
-import { TTaskPriorityType, TTaskType } from "./tasks.type";
+import { TTaskPriorityType, TTaskStatus } from "./tasks.type";
 
-export const TASK_STATUS: TTaskType[] = ["pending", "in-progress", "done"];
+export const TASK_STATUS: TTaskStatus[] = ["pending", "in-progress", "done"];
 
-export const STATUS_LABEL: Record<TTaskType, string> = {
+export const STATUS_LABEL: Record<TTaskStatus, string> = {
     pending: "Pending",
     "in-progress": "In Progress",
     done: "Done"

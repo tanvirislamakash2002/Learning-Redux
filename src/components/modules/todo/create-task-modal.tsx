@@ -27,7 +27,7 @@ import {
   STATUS_LABEL,
   TASK_PRIORITY,
   PRIORITY_LABEL,
-  type TTaskType,
+  type TTaskStatus,
   type TTaskPriorityType,
 } from "@/redux/features/tasks"
 import { useAppDispatch } from "@/redux/hooks"
@@ -36,7 +36,7 @@ import { addTask } from "@/redux/features/tasks/tasks.slice"
 export interface TaskFormData {
   title: string
   description: string
-  status: TTaskType
+  status: TTaskStatus
   priority: TTaskPriorityType
 }
 
@@ -131,7 +131,7 @@ export function CreateTaskModal() {
                 render={({ field }) => (
                   <Select
                     value={field.value}
-                    onValueChange={(val) => field.onChange(val as TTaskType)}
+                    onValueChange={(val) => field.onChange(val as TTaskStatus)}
                   >
                     <SelectTrigger className="w-full h-10 bg-[#18181b]/80 border-neutral-800 text-white rounded-xl px-3.5 text-sm focus-visible:ring-1 focus-visible:ring-neutral-600">
                       <SelectValue placeholder="Select status" />

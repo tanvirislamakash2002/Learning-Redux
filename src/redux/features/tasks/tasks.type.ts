@@ -1,4 +1,4 @@
-export type TTaskType = "pending" | "in-progress" | "done"
+export type TTaskStatus = "pending" | "in-progress" | "done"
 export type TTaskPriorityType = "low" | "medium" | "high"
 
 export interface ITask {
@@ -6,7 +6,7 @@ export interface ITask {
     title: string;
     description: string;
     priority: TTaskPriorityType;
-    status: TTaskType;
+    status: TTaskStatus;
     createdAt: number;
     updatedAt: number;
 }

@@ -1,5 +1,5 @@
 import { createSlice, nanoid, type PayloadAction } from "@reduxjs/toolkit";
-import type { ITask, TInitialState, TTaskType } from "./tasks.type";
+import type { ITask, TInitialState, TTaskStatus } from "./tasks.type";
 
 const initialState: TInitialState = []
 
@@ -37,7 +37,7 @@ const tasksSlice = createSlice({
         },
         updateStatus: (
             state,
-            action: PayloadAction<{ id: string; status: TTaskType }>
+            action: PayloadAction<{ id: string; status: TTaskStatus }>
         ) => {
             const { id, status } = action.payload;
             const task = state.find((item) => item.id === id);

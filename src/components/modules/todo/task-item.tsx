@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { PriorityBadge } from "./priority-badge";
-import type { ITask, TTaskType } from "@/redux/features/tasks";
+import type { ITask, TTaskStatus } from "@/redux/features/tasks";
 import { TASK_STATUS } from "@/redux/features/tasks";
 import { useAppDispatch } from "@/redux/hooks";
 import { updateStatus, removeTask, updateTask } from "@/redux/features/tasks/tasks.slice";
@@ -33,7 +33,7 @@ export function TaskItem({ task }: { task: ITask }) {
     const dispatch = useAppDispatch();
     const [editOpen, setEditOpen] = useState(false);
     const handleStatusChange = (value: string) => {
-        dispatch(updateStatus({ id: task.id, status: value as TTaskType }));
+        dispatch(updateStatus({ id: task.id, status: value as TTaskStatus }));
     };
     const handleEdit = () => {
         setEditOpen(true);
