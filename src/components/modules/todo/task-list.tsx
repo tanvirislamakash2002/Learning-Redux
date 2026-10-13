@@ -6,10 +6,10 @@ import { TaskItem } from "./task-item";
 import { Card } from "@/components/ui/card";
 import type { ITask } from "@/redux/features/tasks";
 import { useAppSelector } from "@/redux/hooks";
-import { selectAllTasks, selectTotalCount } from "@/redux/features/tasks/tasks.selector";
+import { selectFilteredTasks, selectTotalCount } from "@/redux/features/tasks/tasks.selector";
 
 export function TaskList() {
-    const tasks: ITask[] = useAppSelector(selectAllTasks);
+    const tasks: ITask[] = useAppSelector(selectFilteredTasks);
     const total = useAppSelector(selectTotalCount);
     const isFiltering = false;
 
