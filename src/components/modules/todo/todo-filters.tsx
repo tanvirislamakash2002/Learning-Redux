@@ -1,6 +1,5 @@
 "use client"
 
-import React, { useState } from "react"
 import { Search, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import {
@@ -16,19 +15,15 @@ import {
   TASK_PRIORITY,
   PRIORITY_LABEL,
 } from "@/redux/features/tasks"
+import { useAppDispatch, useAppSelector } from "@/redux/hooks"
+import { changePriorityFilter, changeQuery, changeSortMode, changeStatusFilter, clearFilter, selectPriorityFilter, selectQuery, selectSortMode, selectStatusFilter } from "@/redux/features/filters"
 
 export function TodoFilters() {
-  const [searchQuery, setSearchQuery] = useState("")
-  const [statusFilter, setStatusFilter] = useState("")
-  const [priorityFilter, setPriorityFilter] = useState("")
-  const [sortFilter, setSortFilter] = useState("")
-
-  const handleClearFilters = () => {
-    setSearchQuery("")
-    setStatusFilter("")
-    setPriorityFilter("")
-    setSortFilter("")
-  }
+  const dispatch = useAppDispatch()
+  const query = useAppSelector(selectQuery)
+  const status = useAppSelector(selectStatusFilter)
+  const priority = useAppSelector(selectPriorityFilter)
+  const sort = useAppSelector(selectSortMode)
 
   return (
     <div className="flex flex-wrap items-center gap-3">
@@ -36,8 +31,8 @@ export function TodoFilters() {
       <div className="relative flex-1 min-w-[200px]">
         <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-neutral-400" />
         <Input
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          value={query}
+          onChange={(e) => dispatch(changeQuery(e.target.value))}
           placeholder="Search tasks..."
           className="bg-[#121214]/60 border-neutral-800/80 text-white placeholder:text-neutral-500 rounded-xl pl-10 pr-3.5 h-10 text-sm focus-visible:ring-1 focus-visible:ring-neutral-600 focus-visible:border-neutral-700 w-full"
         />
@@ -46,8 +41,8 @@ export function TodoFilters() {
       {/* Status Filter Dropdown */}
       <div className="w-36">
         <Select
-          value={statusFilter}
-          onValueChange={(val) => setStatusFilter(val ?? "")}
+          value={status}
+          onValueChange={(value) => dispatch(changeStatusFilter(value))}
         >
           <SelectTrigger className="w-full h-10 bg-[#121214]/60 border-neutral-800/80 text-neutral-300 rounded-xl px-3.5 text-sm focus-visible:ring-1 focus-visible:ring-neutral-600">
             <SelectValue placeholder="All Status" />
@@ -66,8 +61,8 @@ export function TodoFilters() {
       {/* Priority Filter Dropdown */}
       <div className="w-36">
         <Select
-          value={priorityFilter}
-          onValueChange={(val) => setPriorityFilter(val ?? "")}
+          value={priority}
+          onValueChange={(value) => dispatch(changePriorityFilter(value))}
         >
           <SelectTrigger className="w-full h-10 bg-[#121214]/60 border-neutral-800/80 text-neutral-300 rounded-xl px-3.5 text-sm focus-visible:ring-1 focus-visible:ring-neutral-600">
             <SelectValue placeholder="All Priority" />
@@ -86,8 +81,8 @@ export function TodoFilters() {
       {/* Sort Filter Dropdown */}
       <div className="w-36">
         <Select
-          value={sortFilter}
-          onValueChange={(val) => setSortFilter(val ?? "")}
+          value={sort}
+          onValueChange={(value) => dispatch(changeSortMode(value))}
         >
           <SelectTrigger className="w-full h-10 bg-[#121214]/60 border-neutral-800/80 text-neutral-300 rounded-xl px-3.5 text-sm focus-visible:ring-1 focus-visible:ring-neutral-600">
             <SelectValue placeholder="Sort by" />
@@ -102,7 +97,7 @@ export function TodoFilters() {
 
       {/* Clear Button */}
       <button
-        onClick={handleClearFilters}
+        onClick={() => dispatch(clearFilter())}
         type="button"
         className="flex items-center gap-1.5 text-sm font-medium text-neutral-300 hover:text-white px-2 py-2 cursor-pointer transition-colors"
       >

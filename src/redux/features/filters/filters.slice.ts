@@ -28,6 +28,9 @@ const filtersSlice = createSlice({
         changeSortMode: (state, action) => {
             state.sort = action.payload;
         },
+        clearFilter: () => {
+            return initialState
+        },
     }
 })
 
@@ -35,7 +38,8 @@ export const {
     changeQuery,
     changePriorityFilter,
     changeSortMode,
-    changeStatusFilter
+    changeStatusFilter,
+    clearFilter
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;
