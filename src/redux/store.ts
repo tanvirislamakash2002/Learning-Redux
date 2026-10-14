@@ -1,7 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { rootReducer } from './rootReducer'
+import { loggerMiddleware } from './middlewares/logger.middleware'
 export const store = configureStore({
     reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(loggerMiddleware),
     devTools: true
     // devTools: process.env.NEXT_PUBLIC_NODE_ENV === "development"
 })
