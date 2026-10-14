@@ -1,15 +1,20 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { rootReducer } from './rootReducer'
-import { loggerMiddleware } from './middlewares/logger.middleware'
+import {
+    FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE,
+} from "redux-persist";
+import { configureStore } from "@reduxjs/toolkit";
+import { rootReducer } from "./rootReducer";
+
 export const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(loggerMiddleware),
-    devTools: true
-    // devTools: process.env.NEXT_PUBLIC_NODE_ENV === "development"
-})
+    middleware: (getDefault) =>
+        getDefault({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }),
+    devTools: true,
+});
 
-// Infer the `RootState`, `AppDispatch`, and `AppStore` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
-export type AppStore = typeof store
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppStore = typeof store;
