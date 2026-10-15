@@ -7,13 +7,26 @@ import { Card } from "@/components/ui/card";
 import type { ITask } from "@/redux/features/tasks";
 import { useAppSelector } from "@/redux/hooks";
 import { selectFilteredTasks, selectTotalCount } from "@/redux/features/tasks/tasks.selector";
+import { useGetTasksQuery } from "@/redux/baseApi";
 
 export function TaskList() {
-    const tasks: ITask[] = useAppSelector(selectFilteredTasks);
-    const total = useAppSelector(selectTotalCount);
-    const isFiltering = false;
+    const { data, isLoading, isFetching } = useGetTasksQuery(undefined)
+    const tasks = data?.data as ITask[] ?? []
+    const pagination = data?.pagination
 
-    if (total === 0) {
+    const isFiltering = false;
+    console.log('from rtk query', tasks)
+
+    if (isLoading) {
+        return (
+            <Card className="flex flex-col items-center gap-2 px-6 py-12 text-center text-muted-foreground">
+                <p className="text-sm">Loading tasks...</p>
+            </Card>
+        )
+    }
+
+
+    if (!isLoading && pagination?.total === 0) {
         return (
             <TodoEmptyState />
         );

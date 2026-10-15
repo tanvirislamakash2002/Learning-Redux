@@ -3,6 +3,7 @@ import counterReducer from "@/redux/features/counter/counterSlice";
 import tasksReducer from "@/redux/features/tasks/tasks.slice";
 import filtersReducer from "@/redux/features/filters/filters.slice";
 import { persistReducer } from "redux-persist";
+import { baseApi } from "./baseApi";
 
 const storage = {
     getItem: (key: string) =>
@@ -28,6 +29,7 @@ const persistConfig = {
 export const rootReducer = persistReducer(
     persistConfig,
     combineReducers({
+        [baseApi.reducerPath]: baseApi.reducer,
         counter: counterReducer,
         tasks: tasksReducer,
         filters: filtersReducer,

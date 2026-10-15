@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 
 import React, { useState } from "react"
@@ -32,6 +33,8 @@ import {
 } from "@/redux/features/tasks"
 import { useAppDispatch } from "@/redux/hooks"
 import { addTask } from "@/redux/features/tasks/tasks.slice"
+import { useCreateTaskMutation } from "@/redux/baseApi"
+import { toast } from "sonner"
 
 export interface TaskFormData {
   title: string
@@ -41,6 +44,7 @@ export interface TaskFormData {
 }
 
 export function CreateTaskModal() {
+  const [createTask, { isLoading }] = useCreateTaskMutation()
   const [isOpen, setIsOpen] = useState(false)
   const dispatch = useAppDispatch()
 
@@ -53,11 +57,19 @@ export function CreateTaskModal() {
     },
   })
 
-  const onSubmit = (data: TaskFormData) => {
-    console.log("Create Task Form Submitted:", data)
-    dispatch(addTask(data))
-    reset()
-    setIsOpen(false)
+  const onSubmit = async (values: TaskFormData) => {
+    try {
+      const res = await createTask(values).unwrap();
+
+      if (res?.id) {
+        toast.success("Task Created");
+        reset();
+        setIsOpen(false);
+      }
+    } catch (err: any) {
+      console.error("Create task error:", err);
+      toast.error(err?.data?.message || "Failed to create task");
+    }
   }
 
   const handleCancel = () => {
