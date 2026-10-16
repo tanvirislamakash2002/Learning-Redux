@@ -5,19 +5,46 @@ import { TodoEmptyState } from "./todo-empty-state";
 import { TaskItem } from "./task-item";
 import { Card } from "@/components/ui/card";
 import type { ITask } from "@/redux/features/tasks";
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { selectFilteredTasks, selectTotalCount } from "@/redux/features/tasks/tasks.selector";
 import { useGetTasksQuery } from "@/redux/baseApi";
+import { selectFilters, selectStatusFilter } from "@/redux/features/filters";
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem, PaginationLink, PaginationNext } from "@/components/ui/pagination";
+
+const getPageNumber = (current: number, totalPages: number) => {
+    const pages: ("*" | number)[] = [1]
+
+    if (current > 3) {
+        pages.push("*")
+    }
+    const start = Math.max(2, current - 1);
+    const end = totalPages;
+
+    for (let i = start; i < end; i++) {
+        pages.push(i)
+    }
+
+    if (current < totalPages - 2) {
+        pages.push("*")
+    }
+    pages.push(totalPages)
+    return pages
+}
 
 export function TaskList() {
-    const { data, isLoading, isFetching } = useGetTasksQuery(undefined, {
+    const dispatch = useAppDispatch()
+    const filter = useAppSelector(selectFilters)
+    const status = useAppSelector(selectStatusFilter)
+    const { data, isLoading, isFetching } = useGetTasksQuery({ ...filter, limit: 10 }, {
         refetchOnMountOrArgChange: true
     })
     const tasks = data?.data as ITask[] ?? []
     const pagination = data?.pagination
 
+    const current = pagination?.page || 1;
+    const totalPages = pagination?.totalPages || 1;
+
     const isFiltering = false;
-    console.log('from rtk query', tasks)
 
     if (isLoading) {
         return (
@@ -53,6 +80,34 @@ export function TaskList() {
             {tasks.map((task) => (
                 <TaskItem key={task.id} task={task} />
             ))}
+            {
+                pagination && totalPages! > 1 && (
+                    <Pagination>
+                        <PaginationContent>
+                            {
+                                getPageNumber(current, totalPages).map((page) =>
+                                    page === "*" ?
+                                        (<PaginationItem>
+                                            <PaginationEllipsis />
+                                        </PaginationItem>) : (<PaginationItem>
+                                            <PaginationLink isActive={page === current} onClick={() => dispatch(pageChanged(page))}>
+                                                {page}
+                                            </PaginationLink>
+                                        </PaginationItem>)
+                                )
+                            }
+                            <PaginationItem>
+                                <PaginationNext
+                                    onClick={() => {
+                                        if (pagination.hasNext) {
+                                            dispatch(pageChanged(current + 1))
+                                        }
+                                    }} />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                )
+            }
         </div>
     );
 }

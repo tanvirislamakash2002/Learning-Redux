@@ -1,5 +1,24 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { ITask } from "./features/tasks";
+import { IFilterStatus } from "./features/filters";
 
+interface IPagination {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+}
+
+interface ITaskResponse {
+    data: ITask[],
+    pagination: IPagination
+}
+
+interface ITaskParams extends IFilterStatus {
+    limit: number
+}
 export const baseApi = createApi({
     reducerPath: "baseApi",
     baseQuery: fetchBaseQuery({
@@ -7,8 +26,8 @@ export const baseApi = createApi({
     }),
     tagTypes: ["Tasks"],
     endpoints: (build) => ({
-        getTasks: build.query({
-            query: () => ({ url: "/tasks" }),
+        getTasks: build.query<ITaskResponse, ITaskParams>({
+            query: (params) => ({ url: "/tasks", params }),
             providesTags: ["Tasks"],
         }),
         getTaskById: build.query({
