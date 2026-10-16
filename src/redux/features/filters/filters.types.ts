@@ -8,5 +8,6 @@ export interface IFilterStatus {
     query: string;
     priority: TPriorityFilter;
     status: TStatusFilter;
-    sort: TSortMode
+    sort: TSortMode;
+    page: number;
 }
