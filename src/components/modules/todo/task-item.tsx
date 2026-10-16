@@ -117,6 +117,6 @@ export function TaskItem({ task }: { task: ITask }) {
             </DropdownMenu>
         </Card>
 
-        <EditTaskModal open={editOpen} onClose={closeEdit} task={task} />
+        <EditTaskModal open={editOpen} onClose={closeEdit} task={task} id={task?.id} />
     </>);
 }

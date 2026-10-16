@@ -9,6 +9,7 @@ import {
 } from "redux-persist";
 import { rootReducer } from "./rootReducer";
 import { baseApi } from "./baseApi";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
 export const store = configureStore({
     reducer: rootReducer,
@@ -20,6 +21,8 @@ export const store = configureStore({
         }).concat(baseApi.middleware),
     devTools: true,
 });
+
+setupListeners(store.dispatch)
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

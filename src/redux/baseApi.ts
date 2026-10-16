@@ -17,6 +17,14 @@ export const baseApi = createApi({
         createTask: build.mutation({
             query: (body) => ({ url: "/tasks", method: "POST", body }),
             invalidatesTags: ["Tasks"],
+        }),
+        updateTask: build.mutation({
+            query: ({ id, change }) => ({
+                url: `/tasks/${id}`,
+                method: "PATCH",
+                body: change
+            }),
+            invalidatesTags: ["Tasks"],
         })
     })
 })
@@ -24,5 +32,6 @@ export const baseApi = createApi({
 export const {
     useGetTasksQuery,
     useCreateTaskMutation,
-    useGetTaskByIdQuery
+    useGetTaskByIdQuery,
+    useUpdateTaskMutation
 } = baseApi;

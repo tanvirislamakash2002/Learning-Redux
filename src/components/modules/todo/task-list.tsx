@@ -10,7 +10,9 @@ import { selectFilteredTasks, selectTotalCount } from "@/redux/features/tasks/ta
 import { useGetTasksQuery } from "@/redux/baseApi";
 
 export function TaskList() {
-    const { data, isLoading, isFetching } = useGetTasksQuery(undefined)
+    const { data, isLoading, isFetching } = useGetTasksQuery(undefined, {
+        refetchOnMountOrArgChange: true
+    })
     const tasks = data?.data as ITask[] ?? []
     const pagination = data?.pagination
 
